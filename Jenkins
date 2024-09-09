@@ -1,17 +1,21 @@
-pipeline{
-stages{
-    stage('Checkout'){
-        steps{
-            git'https://github.com/AmeyD090/calculator.git'
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/AmeyD090/calculator.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
         }
     }
-    stage('Build')
-    steps{
-        sh 'mvn clean install'
-    }
-    stage('Test')
-    steps{
-        sh 'mvn test'
-    }
-}
 }
