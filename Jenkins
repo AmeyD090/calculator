@@ -1,19 +1,31 @@
 pipeline {
     agent any
+    tools {
+        maven 'Maven 3.8.4'
+        jdk 'JDK17'
+    }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/AmeyD090/calculator.git'
+                echo 'Checking for git'
+                git branch: 'main', url: 'https://github.com/AmeyD090/calculator.git'
             }
         }
         stage('Build') {
             steps {
+                echo 'Start building'
                 sh 'mvn clean install'
             }
+            post{
+                success{
+                    echo 'Archiving artifact'
+                    archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+                }
+            }
         }
-        stage('Test') {
-            steps {
+        stage('Test'){
+            steps{
                 sh 'mvn test'
             }
         }
